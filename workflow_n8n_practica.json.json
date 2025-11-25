@@ -1,0 +1,102 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -560,
+        16
+      ],
+      "id": "31d5fab8-4b1b-4fdf-990e-749a573213ce",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -352,
+        16
+      ],
+      "id": "2d307881-018b-4fbe-92bb-e1b679aff2e6",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "url": "https://jsonplaceholder.typicode.com/posts/1",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -192,
+        16
+      ],
+      "id": "edbeb2ed-b0bb-44fe-9986-56ba269a2f8f",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "jsCode": "// \"items\" es la data que viene del nodo anterior.\n// Tomamos sólo el título, el cuerpo y el ID.\n\nreturn items.map(item => {\n  const data = item.json;\n\n  return {\n    json: {\n      id: data.id,\n      titulo: data.title,\n      resumen: data.body.slice(0, 50) + \"...\" // ejemplo de transformación\n    }\n  };\n});\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -16,
+        16
+      ],
+      "id": "01e135a8-ee4d-4975-8f61-9e7b402cc790",
+      "name": "Code in JavaScript"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "0b9b5a4d-df21-4096-8b56-82aaf0b47cd4",
+  "meta": {
+    "instanceId": "90b360697ea93c7ffe67b2af51e02e53d1ee9131955ad660b6ca5f5a9eff9fba"
+  },
+  "id": "2KKYL1jazgzNN9Yl",
+  "tags": []
+}
